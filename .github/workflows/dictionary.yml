@@ -1,0 +1,29 @@
+# Rebuilds dict.db from the latest JMdict / KANJIDIC2 / JmdictFurigana / JLPT releases.
+# The EDRDG licence requires a procedure for regularly updating dictionary data.
+name: Build dictionary
+
+on:
+  schedule:
+    - cron: '0 3 1 * *' # monthly, 1st day 03:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run dict:build
+      - run: npx vitest run tests/dictionary.test.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dict-db
+          path: resources/dict.db
+          retention-days: 90

@@ -1,0 +1,61 @@
+appId: com.japanlearn.app
+productName: JapanLearn
+directories:
+  buildResources: build
+  output: dist
+files:
+  - out/**
+  - package.json
+  - "!**/*.map"
+  # Bundled into out/renderer by Vite; the main process never loads them.
+  - "!node_modules/@fontsource/**"
+  - "!node_modules/react/**"
+  - "!node_modules/react-dom/**"
+  - "!node_modules/react-router/**"
+  - "!node_modules/@tanstack/**"
+  - "!node_modules/scheduler/**"
+  # Build-time only: SQLite sources and the WASM fallback of the FSRS optimizer.
+  - "!node_modules/better-sqlite3/deps/**"
+  - "!node_modules/better-sqlite3/src/**"
+  - "!node_modules/@open-spaced-repetition/binding-wasm32-*/**"
+asarUnpack:
+  - "**/*.node"
+extraResources:
+  - from: drizzle
+    to: drizzle
+  # Built by `npm run dict:build` (CC BY-SA 4.0, see THIRD_PARTY_NOTICES.md)
+  - from: resources/dict.db
+    to: dict.db
+  - from: LICENSE
+    to: legal/LICENSE
+  - from: THIRD_PARTY_NOTICES.md
+    to: legal/THIRD_PARTY_NOTICES.md
+  - from: licenses
+    to: legal/licenses
+mac:
+  target: dmg
+  category: public.app-category.education
+win:
+  target: nsis
+linux:
+  target:
+    - AppImage
+    - deb
+  category: Education
+# No auto-update server: the app stays offline unless the user opts in later.
+publish: null
+# Electron security fuses (https://www.electronjs.org/docs/latest/tutorial/fuses).
+# Flipped in the binary at package time; they cannot be changed at runtime.
+electronFuses:
+  runAsNode: false # the app binary can't be used to run arbitrary Node scripts
+  enableNodeOptionsEnvironmentVariable: false # NODE_OPTIONS can't inject code
+  enableNodeCliInspectArguments: false # no --inspect debugger (test builds re-enable it, see test:packaged)
+  enableEmbeddedAsarIntegrityValidation: true # refuse to start if app.asar was modified
+  onlyLoadAppFromAsar: true # only load app code from the (validated) app.asar
+  enableCookieEncryption: true
+  # Kept on: the UI is loaded from file:// and needs it for its module scripts.
+  grantFileProtocolExtraPrivileges: true
+  # Flipping fuses edits the Electron binary, which breaks its ad-hoc signature;
+  # macOS on Apple Silicon kills such apps at launch. Re-sign ad-hoc (a real
+  # Developer ID signature, when configured, is applied afterwards).
+  resetAdHocDarwinSignature: true

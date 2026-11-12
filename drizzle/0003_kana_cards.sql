@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `cards_kana` ON `cards` (`kana_key`);

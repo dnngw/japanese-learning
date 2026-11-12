@@ -1,0 +1,67 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Noto Sans JP', ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #fbfaf7;
+  --color-panel: #ffffff;
+  --color-ink: #1f2328;
+  --color-muted: #6b7079;
+  --color-line: #e6e3dc;
+  --color-accent: #2f6f62;
+  --color-accent-soft: #e3efeb;
+  --color-learning: #fde9b8;
+  --color-unknown: #8fb3e6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper: #16181b;
+    --color-panel: #1e2125;
+    --color-ink: #e8e6e1;
+    --color-muted: #9aa0a8;
+    --color-line: #2e3237;
+    --color-accent: #6cc0ad;
+    --color-accent-soft: #1f3530;
+    --color-learning: #5a4a1c;
+    --color-unknown: #4d6f9e;
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* One focus style for keyboard users, in the app's accent color. */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Furigana: hidden with visibility so the text does not jump when toggled. */
+ruby rt {
+  font-size: 0.5em;
+  color: var(--color-muted);
+  user-select: none;
+}
+.hide-furigana ruby rt {
+  visibility: hidden;
+}
+
+@keyframes stroke-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

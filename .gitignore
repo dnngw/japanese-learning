@@ -1,0 +1,11 @@
+node_modules/
+out/
+dist/
+*.log
+.DS_Store
+
+# Built locally / in CI
+*.db
+*.db-wal
+*.db-shm
+tools/dict-builder/downloads/
